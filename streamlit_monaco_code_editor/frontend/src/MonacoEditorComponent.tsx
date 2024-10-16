@@ -18,16 +18,10 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
     Streamlit.setFrameHeight();
   }, [height]);
 
-  const countLines = (value: string) => {
-    return value.split('\n').length;
-  }
-
   const onChange = (value: string|undefined, event: any) => {
-    const editor = editorRef.current;
     Streamlit.setComponentValue(value);
-    const lineCount = countLines(value || '');
-    setHeight(lineHeight * Math.max(minLines, lineCount));
-    editor.layout();
+    const contentHeight = editorRef.current.getContentHeight();
+    setHeight(Math.max(contentHeight, lineHeight * minLines));
   }
 
   return (
@@ -37,14 +31,16 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
       theme={vs_theme}
       language={args.language}
       onChange={onChange}
+      value={args.value || ""}
       options={{
         automaticLayout: true,
         minimap: {enabled: false},
         lineHeight: lineHeight,
+        scrollBeyondLastLine: false,
       }}
       onMount={(editor, monaco) => {
         editorRef.current = editor;
-        editor.layout();
+        Streamlit.setComponentValue(args.value);
       }}
     />
   );

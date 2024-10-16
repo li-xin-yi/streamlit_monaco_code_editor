@@ -22,5 +22,5 @@ pip install -e .
 Test the example:
 
 ```sh
-streamlit run example.py
+streamlit run streamlit_monaco_code_editor/example.py
 ```

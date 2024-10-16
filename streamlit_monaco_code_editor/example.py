@@ -29,7 +29,7 @@ st.subheader("Monaco Code Editor")
 # st.markdown("You've clicked %s times!" % int(num_clicks))
 
 st.write("Enter some code:")
-code = monaco_code_editor(language="python")
+code = monaco_code_editor(language="python", value="print('Hello, World!')")
 
 st.write("You entered:")
 st.code(code, language="python")
