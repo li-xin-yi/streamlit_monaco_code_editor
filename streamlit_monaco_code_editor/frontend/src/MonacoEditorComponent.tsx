@@ -27,8 +27,6 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
     Streamlit.setComponentValue(value);
     const lineCount = countLines(value || '');
     setHeight(lineHeight * Math.max(minLines, lineCount));
-    console.log('height', height);
-    // Streamlit.setFrameHeight(height);
     editor.layout();
   }
 
@@ -38,7 +36,6 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
       height={height}
       theme={vs_theme}
       language={args.language}
-      defaultValue="# Write your Python code here"
       onChange={onChange}
       options={{
         automaticLayout: true,
@@ -47,8 +44,6 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
       }}
       onMount={(editor, monaco) => {
         editorRef.current = editor;
-        const editorElement = editor.getDomNode()!.parentElement;
-        console.log('editorElement', editorElement);
         editor.layout();
       }}
     />

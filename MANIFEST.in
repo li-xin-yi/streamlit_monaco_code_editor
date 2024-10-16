@@ -1,1 +1,1 @@
-recursive-include streamlit-monacp-code-editor/frontend/build *
+recursive-include streamlit_monaco_code_editor/frontend/build *
