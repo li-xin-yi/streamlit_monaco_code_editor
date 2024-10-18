@@ -37,6 +37,7 @@ const MonacoEditorComponent = ({ args, width, disabled, theme }: ComponentProps)
         minimap: {enabled: false},
         lineHeight: lineHeight,
         scrollBeyondLastLine: false,
+        ...args.options
       }}
       onMount={(editor, monaco) => {
         editorRef.current = editor;
