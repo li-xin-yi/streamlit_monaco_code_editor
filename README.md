@@ -1,5 +1,14 @@
 # Streamlit Manoco Code Editor
 
+![PyPI - Version](https://img.shields.io/pypi/v/streamlit-monaco-code-editor)
+
+## Installation
+
+```sh
+pip install streamlit-monaco-code-editor
+```
+
+
 A wrapper of the Monaco Code Editor for Streamlit
 
 - Support dynamic height and min height.
