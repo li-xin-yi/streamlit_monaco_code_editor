@@ -6,11 +6,13 @@ import {
   Streamlit,
   ComponentProps,
 } from "streamlit-component-lib"
-import { Fab, Box } from "@mui/material"
-import ExpandLessIcon from "@mui/icons-material/ExpandLess"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
+import { Fab } from "@mui/material"
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 
 const lineHeight = 20
+const default_min_lines = 10
+const default_max_lines = 10
 
 const MonacoEditorComponent = ({
   args,
@@ -24,33 +26,67 @@ const MonacoEditorComponent = ({
   }
   const editorRef = useRef<any>(null)
 
-  const minLines = args.minLines || 10
-  const maxLines = args.maxLines || 30
+  const minLines = args.minLines || default_min_lines
+  const maxLines = args.maxLines || default_max_lines
   const [height, setHeight] = useState(lineHeight * minLines)
   const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
 
   useEffect(() => {
-    Streamlit.setFrameHeight()
+    Streamlit.setFrameHeight(height)
+    if (editorRef.current) {
+      const parent = editorRef.current.getDomNode().parentElement
+      if (parent) {
+        console.log("parent", parent)
+        // parent.style.height = `${height}px`
+      }
+    }
   }, [height])
 
-  const onChange = (value: string | undefined, event: any) => {
-    Streamlit.setComponentValue(value)
+
+
+  const updateHeight = useCallback((isCollapsed: boolean) => {
+    if (!editorRef.current) {
+      return
+    }
     const contentHeight = editorRef.current.getContentHeight()
-    const h = Math.min(
-      Math.max(contentHeight, lineHeight * minLines),
-      lineHeight * maxLines
-    )
+    console.log("isCollapsed", isCollapsed)
+    const h = isCollapsed
+      ? Math.min(lineHeight * minLines, contentHeight)
+      : Math.max(contentHeight, lineHeight * maxLines)
     setHeight(h)
-  }
+  }, [setHeight])
+
+  useEffect(() => {
+    updateHeight(isCollapsed)
+  }, [isCollapsed])
+
+
+  const onChange = useCallback(
+    (value: string | undefined, event: any) => {
+      console.log("onChange, isCollapsed", isCollapsed)
+      Streamlit.setComponentValue(value)
+      
+      updateHeight(isCollapsed)
+    },
+    [updateHeight, isCollapsed]
+  )
+
+  const onClick = useCallback(() => {
+    setIsCollapsed(prevState => !prevState)
+  }, [setIsCollapsed])
 
   return (
-    <>
+    <div
+      onMouseEnter={() => setIsHovering(true)}
+      onMouseLeave={() => setIsHovering(false)}
+    >
       <Editor
         width={width}
         height={height}
         theme={vs_theme}
         language={args.language}
-        onChange={onChange}
+        onChange={(value, event) => {console.log("isCollapsed", isCollapsed) ;onChange(value, event);}}
         value={args.value || ""}
         options={{
           automaticLayout: true,
@@ -62,15 +98,29 @@ const MonacoEditorComponent = ({
         onMount={(editor, monaco) => {
           editorRef.current = editor
           Streamlit.setComponentValue(args.value)
-          const contentHeight = editor.getContentHeight()
-          const h = Math.min(
-            Math.max(contentHeight, lineHeight * minLines),
-            lineHeight * maxLines
-          )
-          setHeight(h)
+          updateHeight(isCollapsed)
         }}
       />
-    </>
+      <Fab
+        size="small"
+        color="primary"
+        onClick={onClick}
+        sx={{
+          position: "absolute",
+          right: "1rem",
+          bottom: "0.5rem",
+          zIndex: 10,
+          opacity: isHovering ? 0.5 : 0,
+          backgroundColor: "#1976d2",
+          "&:hover": {
+            backgroundColor: "#1565c0",
+          },
+        }}
+        aria-label={isCollapsed ? "Expand editor" : "Collapse editor"}
+      >
+        {isCollapsed ? <OpenInFullIcon /> : <CloseFullscreenIcon />  }
+      </Fab>
+    </div>
   )
 }
 
