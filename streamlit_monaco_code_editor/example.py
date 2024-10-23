@@ -33,4 +33,7 @@ code = monaco_code_editor(language="python", value="print('Hello, World!')")
 
 st.write("You entered:")
 st.code(code, language="python")
+
+example_code = "114514\n" * 20
+manually_edited_code = monaco_code_editor(language="python", value=example_code)
 # st.code(code, language="python")
