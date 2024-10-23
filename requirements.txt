@@ -1,1 +1,1 @@
-git+https://github.com/li-xin-yi/streamlit_monaco_code_editor.git
+streamlit-monaco-code-editor==0.0.2
