@@ -7,7 +7,7 @@ long_description = (this_directory / "README.md").read_text()
 
 setuptools.setup(
     name="streamlit_monaco_code_editor",
-    version="0.0.2",
+    version="0.0.3",
     author="Xinyi Li",
     author_email="wolixinyi@gmail.com",
     description="A wrapper of the Monaco Editor for Streamlit",

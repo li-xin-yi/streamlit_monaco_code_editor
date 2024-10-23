@@ -1,1 +1,1 @@
-streamlit-monaco-code-editor==0.0.2
+streamlit-monaco-code-editor
