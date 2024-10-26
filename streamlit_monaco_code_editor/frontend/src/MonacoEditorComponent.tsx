@@ -99,6 +99,19 @@ const MonacoEditorComponent = ({
           editorRef.current = editor
           Streamlit.setComponentValue(args.value)
           updateHeight(isCollapsed)
+
+          editor.getDomNode()!.addEventListener('dragover', (e) => e.preventDefault());
+          editor.getDomNode()!.addEventListener('drop', (e) => {
+            e.preventDefault();
+            const file = e.dataTransfer!.files[0];
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const text = e.target!.result as string;
+              editor.setValue(text);
+            };
+            reader.readAsText(file);
+          });
+          
         }}
       />
       <Fab
