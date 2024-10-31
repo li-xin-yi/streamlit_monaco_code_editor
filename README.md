@@ -13,6 +13,7 @@ A wrapper of the Monaco Code Editor for Streamlit
 
 - Support dynamic height and min height.
 - Switch `vs-dark` and `vs-light` themes based on Streamlit theme.
+- If Dragging a file to the editor, it will read the file content and display it.
 
 ![screenshot](screenshot.png)
 
